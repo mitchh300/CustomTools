@@ -1,7 +1,6 @@
 ## Code found here: http://support.esri.com/technical-article/000011912
 ## This script is meant to be imported in an ArcToolbox as a script tool.  The script exports feature class attachments
 ## specifically .jpg images. The exported attachments are saved to a folder the user specifies. 
-##
 
 import arcpy
 from arcpy import da
