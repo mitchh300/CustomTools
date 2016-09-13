@@ -6,6 +6,8 @@
 ## records in a specific field.  A checkbox is included in the script to check for duplicate geometries.
 ## Both a specific field AND the duplicate geometry checkbox should not be selected at one time. This tool was
 ## built as a replacement for the 'Delete Identical (Data Management)' tool found in the ArcGIS Advanced License package.
+##EDITS: 
+##9/12/2016 - After some testing, using sets was found to be much faster than lists. All old lists were convereted to sets().
 
 import arcpy
 
@@ -19,8 +21,8 @@ field = arcpy.GetParameterAsText(1)
 ischecked = arcpy.GetParameterAsText(2)
 
 #Lists
-field_list = []
-shapes = []
+field_list = set()
+shapes = set()
 
 #Count for messages
 count = 0
@@ -29,7 +31,7 @@ if str(ischecked) == 'true':
     with arcpy.da.UpdateCursor(feature, ['SHAPE@XY']) as cursor:
         for row in cursor:
             if row[0] not in shapes:
-                shapes.append(row[0])
+                shapes.add(row[0])
             else:
                 count+=1
                 cursor.deleteRow()
@@ -38,7 +40,7 @@ else:
     with arcpy.da.UpdateCursor(feature, [field]) as cursor:
         for row in cursor:
             if row[0] not in field_list:
-                field_list.append(row[0])
+                field_list.add(row[0])
             else:
                 count+=1
                 cursor.deleteRow()
