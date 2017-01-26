@@ -50,4 +50,4 @@ with arcpy.da.UpdateCursor(targetFeatures, [uniqueID,'SHAPE@X','SHAPE@Y']) as cu
                 row[2] = float(x.split('|')[2])
                 count += 1
                 cursor.updateRow(row)
-arcpy.AddMessage("\n%s features were snapped to input features locations.\n")
+arcpy.AddMessage("\n%s features were snapped to input features locations.\n" % count)
