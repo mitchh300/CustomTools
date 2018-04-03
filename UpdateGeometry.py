@@ -3,20 +3,31 @@
                  based on a unique ID match
     Notes: Both source and target feature must be point features
 """
+import arcpy
+impory sys
 
 source = r'... path to source feature class...'
 target = r'...path to target feature class...'
-uniqueID = "UNIQUEID"
-source_keys = []
+uniqueID = "UNIQUEID" #GUID or unique identifier of dataset rows
 
-with arcpy.da.SearchCursor(source, [uniqueID,'SHAPE@X','SHAPE@Y']) as cursor:
-    for row in cursor:
-        source_keys.append(str(row[0])+'|'+str(row[1])+"|"+str(row[2]))
+#build dict of source ids and shape geometry
+source_keys = {row[0]:row[1] for row in arcpy.da.SearchCursor(source, [uniqueID,'SHAPE@XY'])}
 
-with arcpy.da.UpdateCursor(target, [uniqueID,'SHAPE@X','SHAPE@Y']) as cursor:
+#ensure source and target are points
+souceDesc = arcpy.Describe(source)
+targetDesc = arcpy.Describe(target)
+if sourceDesc.shapeType != 'Point':
+    print "Source geometry is not point geometry"
+    sys.exit(0)
+    
+if targetDesc.shapeType != 'Point':
+    print "Target dataset is not point geometry"
+    sys.exit(0)
+
+#update target geometry to source if found in source_keys dictionary
+with arcpy.da.UpdateCursor(target, [uniqueID,'SHAPE@XY']) as cursor:
     for row in cursor:
-        for s in source_keys:
-            if str(row[0]) == s.split("|")[0]:
-                row[1] = float(s.split("|")[1])
-                row[2] = float(s.split("|")[2])
-                cursor.updateRow(row)
+        if row[0] in source_keys:
+            row[1] = source_keys[row[0]]
+            cursor.updateRow(row)
+del cursor
