@@ -55,4 +55,4 @@ with arcpy.da.UpdateCursor(targetFeatures, [uniqueID,'SHAPE@XY']) as cursor:
            
 del tCursor
 del cursor
-arcpy.AddMessage("\n{0}s features were snapped to input feature locations.\n".format(count))
+arcpy.AddMessage("{0} features were snapped to input feature locations.\n".format(count))
