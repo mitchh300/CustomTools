@@ -19,22 +19,23 @@ from pandas import DataFrame
 
 def fc_to_pd_dataframe(feature_class, field_list):
     """
-    Loads data into a Pandas Data Frame for subsequent analysis.
+        Loads data into a Pandas Data Frame for subsequent analysis.
     
-    feature_class = Input ArcGIS Feature Class
-    field_list = Fields for input
-    return: Pandas DataFrame object
+        featureClass = Input ArcGIS Feature Class
+        fieldList = Fields for input
+        return: Pandas DataFrame object
     """
     
     return DataFrame(arcpy.da.FeatureClassToNumPyArray(
-                     in_table=feature_class,
-                     field_names=field_list,
+                     in_table=featureClass,
+                     field_names=fieldList,
                      skip_nulls=False,
                      null_value=-99999))
 
 
 def FeatureClassesToExcel(inputData, outputLocation, aliased):
-    """ Exports feature classes to Excel worksheets and
+    """ 
+        Exports feature classes to Excel worksheets and
         combines them in to a single workbook.
 
         inputLoc = Input geodatabase or folder containing shapefiles
@@ -42,7 +43,7 @@ def FeatureClassesToExcel(inputData, outputLocation, aliased):
         aliased = 'true' or 'false' - will use field aliases if true
     """
 
-    #time variables
+    #time variable
     today = datetime.datetime.now().strftime("%m%d%Y")
     
     #set workspace
